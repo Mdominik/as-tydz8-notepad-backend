@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/api")
 public class NoteController {
     NoteRepo noteRepo;
@@ -29,12 +30,14 @@ public class NoteController {
     @GetMapping(value = "{id}")
     public ResponseEntity<Note> findById(@PathVariable long id) {
         Optional<Note> note = noteRepo.findById(id);
+        System.out.println(note.get().getLastModifiedTime());
         return note.isPresent() ? ResponseEntity.ok(note.get()) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
     public ResponseEntity addNote(@RequestBody Note newNote) {
         Note note = noteRepo.save(newNote);
+        System.out.println(note.getLastModifiedTime());
         return note != null ? new ResponseEntity(HttpStatus.CREATED) : new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
@@ -46,6 +49,7 @@ public class NoteController {
             noteRepo.deleteById(noteDB.get().getId());
             note.setCreatedTime(saveCreationTime);
             note.setLastModifiedTime(LocalDateTime.now());
+            System.out.println(note.getLastModifiedTime());
             noteRepo.save(note);
             return ResponseEntity.ok().build();
         }

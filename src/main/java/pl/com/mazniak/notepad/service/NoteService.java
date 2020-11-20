@@ -20,6 +20,7 @@ public class NoteService {
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
         noteController.addNote(new Note("Dzisiaj jest piatek", "Dzien"));
+
     }
 
 }
