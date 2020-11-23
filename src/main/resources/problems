@@ -1,0 +1,3 @@
+1) Hibernate not able to parse LocalDateTime to native Query.
+2) When editing note, the server is deleting the current note and then saving the new one.
+Frontend is remembering the states

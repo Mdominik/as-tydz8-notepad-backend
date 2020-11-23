@@ -1,5 +1,6 @@
 package pl.com.mazniak.notepad.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.com.mazniak.notepad.model.Note;
 import pl.com.mazniak.notepad.repo.NoteRepo;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,8 +18,9 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/api")
 public class NoteController {
-    NoteRepo noteRepo;
+    private NoteRepo noteRepo;
 
+    @Autowired
     public NoteController(NoteRepo noteRepo) {
         this.noteRepo = noteRepo;
     }
@@ -46,12 +49,25 @@ public class NoteController {
         Optional<Note> noteDB = noteRepo.findById(note.getId());
         if(noteDB.isPresent()) {
             LocalDateTime saveCreationTime = noteDB.get().getCreatedTime();
+
+//            if(noteDB.get().getNoteContent() != null
+//            && noteDB.get().getTopic() != null) {
+//                noteRepo.updateTopicAndContent(noteDB.get().getId(), noteDB.get().getTopic(),
+//                        noteDB.get().getNoteContent(), LocalDateTime.now());
+//            }
+//            else if(noteDB.get().getTopic() != null) {
+//                noteRepo.updateOnlyTopic(noteDB.get().getId(),
+//                        noteDB.get().getTopic(), LocalDateTime.now());
+//            }
+//            else if(noteDB.get().getNoteContent() != null) {
+//                noteRepo.updateOnlyContent(noteDB.get().getId(),
+//                        noteDB.get().getNoteContent(), LocalDateTime.now());
+//            }
             noteRepo.deleteById(noteDB.get().getId());
             note.setCreatedTime(saveCreationTime);
             note.setLastModifiedTime(LocalDateTime.now());
             System.out.println(note.getLastModifiedTime());
-            noteRepo.save(note);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(noteRepo.save(note).getId());
         }
         return ResponseEntity.notFound().build();
     }

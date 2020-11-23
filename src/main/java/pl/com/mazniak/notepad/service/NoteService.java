@@ -19,7 +19,12 @@ public class NoteService {
 
     @EventListener(ApplicationReadyEvent.class)
     public void init() {
+        noteController.addNote(new Note(
+                "Dzisiaj jest piatekDzisiaj jest piatekDzisiaj jest piatek#" +
+                        "Dzisiaj jest piatekDzisiaj jest piatekDzisiaj jest piatekDzisiaj jest piatek" +
+                        "Dzisiaj jest piatekDzisiaj jest piatekDzisiaj jest piatekDzisiaj jest piatek", "Dzien"));
         noteController.addNote(new Note("Dzisiaj jest piatek", "Dzien"));
+
 
     }
 
